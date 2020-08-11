@@ -117,8 +117,64 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"src/app.js":[function(require,module,exports) {
+})({"src/Counter.js":[function(require,module,exports) {
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Counter = function () {
+  var VALUE = Symbol();
+  return /*#__PURE__*/function () {
+    function _class(id) {
+      _classCallCheck(this, _class);
+
+      this[VALUE] = 1;
+      this.container = document.getElementById(id);
+      if (this.container == null) throw Error(id + ' 찾을 수 없습니다.');
+      this.container.innerHTML = this[VALUE];
+    }
+
+    _createClass(_class, [{
+      key: "increase",
+      value: function increase() {
+        if (this[VALUE] > 8) return this[VALUE];
+        this[VALUE] += 1;
+        this.container.innerHTML = this[VALUE];
+        return this[VALUE];
+      }
+    }, {
+      key: "decrease",
+      value: function decrease() {
+        if (this[VALUE] < 2) return this[VALUE];
+        this[VALUE] -= 1;
+        this.container.innerHTML = this[VALUE];
+        return this[VALUE];
+      }
+    }, {
+      key: "value",
+      get: function get() {
+        return this[VALUE];
+      }
+    }]);
+
+    return _class;
+  }();
+}();
+
+var counter = new Counter('digit-number');
+document.getElementById('minus-btn').addEventListener('click', function (e) {
+  return counter.decrease();
+});
+document.getElementById('plus-btn').addEventListener('click', function (e) {
+  return counter.increase();
+});
+document.getElementById('start-btn').addEventListener('click', function (e) {
+  e.preventDefault();
+  e.stopPropagation();
+  location.assign("game.html?digit=".concat(counter.value));
+});
 },{}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -323,5 +379,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["node_modules/parcel-bundler/src/builtins/hmr-runtime.js","src/app.js"], null)
-//# sourceMappingURL=/app.a6a4d504.js.map
+},{}]},{},["node_modules/parcel-bundler/src/builtins/hmr-runtime.js","src/Counter.js"], null)
+//# sourceMappingURL=/Counter.b25fa610.js.map
