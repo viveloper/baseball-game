@@ -118,7 +118,88 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 
   return newRequire;
 })({"src/app.js":[function(require,module,exports) {
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var GuessInputControl = /*#__PURE__*/function () {
+  function GuessInputControl(containerSelector) {
+    var _this = this;
+
+    var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+        _ref$callback = _ref.callback,
+        callback = _ref$callback === void 0 ? function () {} : _ref$callback,
+        _ref$digitNumber = _ref.digitNumber,
+        digitNumber = _ref$digitNumber === void 0 ? 3 : _ref$digitNumber;
+
+    _classCallCheck(this, GuessInputControl);
+
+    this.inputEl = document.querySelector(containerSelector);
+
+    if (this.inputEl == null) {
+      throw Error('컨테이너 아이디를 찾을 수 없습니다.');
+    }
+
+    this.inputEl.addEventListener('keydown', function (e) {
+      if (e.keyCode === 13) {
+        var values = Array.from(e.target.value).map(function (v) {
+          return Number(v);
+        });
+
+        if (values.length != digitNumber) {
+          callback([], new Error('자릿수가 맞지 않습니다!'));
+          return;
+        }
+
+        callback(values);
+
+        _this.clear();
+
+        return;
+      }
+    });
+  }
+
+  _createClass(GuessInputControl, [{
+    key: "clear",
+    value: function clear() {
+      this.inputEl.value = '';
+    }
+  }]);
+
+  return GuessInputControl;
+}();
+
+var App = /*#__PURE__*/function () {
+  function App() {
+    _classCallCheck(this, App);
+
+    var queryString = new URLSearchParams(location.search);
+    this.digit = queryString.get('digit');
+    this.inputControl = new GuessInputControl('#guess', {
+      callback: this.handleGuess.bind(this),
+      digitNumber: this.digit
+    });
+  }
+
+  _createClass(App, [{
+    key: "handleGuess",
+    value: function handleGuess(values, error) {
+      if (error) {
+        alert(error.message);
+        return;
+      }
+
+      console.log(values);
+    }
+  }]);
+
+  return App;
+}();
+
+var app = new App();
 },{}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -147,7 +228,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "65257" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58468" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
