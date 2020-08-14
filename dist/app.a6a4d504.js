@@ -117,7 +117,14 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"src/app.js":[function(require,module,exports) {
+})({"src/GuessInputControl.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -167,10 +174,162 @@ var GuessInputControl = /*#__PURE__*/function () {
     value: function clear() {
       this.inputEl.value = '';
     }
+  }, {
+    key: "disable",
+    value: function disable(message) {
+      this.inputEl.disabled = true;
+      this.inputEl.placeholder = message;
+    }
   }]);
 
   return GuessInputControl;
 }();
+
+var _default = GuessInputControl;
+exports.default = _default;
+},{}],"src/GameResult.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var GameResult = /*#__PURE__*/function () {
+  function GameResult(digit, strike, ball) {
+    _classCallCheck(this, GameResult);
+
+    this.digit = digit;
+    this.strike = strike;
+    this.ball = ball;
+  }
+
+  _createClass(GameResult, [{
+    key: "isDone",
+    value: function isDone() {
+      return this.ball == 0 && this.strike == this.digit;
+    }
+  }, {
+    key: "toString",
+    value: function toString() {
+      var resultString = "".concat(this.strike, "S").concat(this.ball, "B");
+
+      if (this.strike === 0 && this.ball === 0) {
+        resultString = 'OUT';
+      }
+
+      return resultString;
+    }
+  }]);
+
+  return GameResult;
+}();
+
+var _default = GameResult;
+exports.default = _default;
+},{}],"src/utils.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getRandomInt = getRandomInt;
+
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+},{}],"src/Baseball.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _GameResult = _interopRequireDefault(require("./GameResult"));
+
+var _utils = require("./utils");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Baseball = /*#__PURE__*/function () {
+  function Baseball() {
+    var digit = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 3;
+
+    _classCallCheck(this, Baseball);
+
+    this.digit = digit;
+    this.problem = this.makeProblem(digit);
+  }
+
+  _createClass(Baseball, [{
+    key: "makeProblem",
+    value: function makeProblem() {
+      // [Q-5] 이부분을 작성해 보세요!
+      var answer = [];
+
+      for (var i = 0; i < this.digit; i++) {
+        var randomInt = (0, _utils.getRandomInt)(1, 9);
+
+        while (answer.indexOf(randomInt) >= 0) {
+          randomInt = (0, _utils.getRandomInt)(1, 9);
+        }
+
+        answer.push(randomInt);
+      }
+
+      return answer;
+    }
+  }, {
+    key: "getResult",
+    value: function getResult(guess) {
+      var _this = this;
+
+      // [Q-6] 이부분을 작성해 보세요! GameResult를 반환해야 합니다.
+      var strike = 0;
+      var ball = 0;
+      this.problem.forEach(function (v, i) {
+        if (guess[i] === v) {
+          strike++;
+        } else if (_this.problem.indexOf(guess[i]) > -1) {
+          ball++;
+        }
+      });
+      return new _GameResult.default(this.digit, strike, ball);
+    }
+  }]);
+
+  return Baseball;
+}();
+
+var _default = Baseball;
+exports.default = _default;
+},{"./GameResult":"src/GameResult.js","./utils":"src/utils.js"}],"src/app.js":[function(require,module,exports) {
+"use strict";
+
+var _GuessInputControl = _interopRequireDefault(require("./GuessInputControl"));
+
+var _Baseball = _interopRequireDefault(require("./Baseball"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
 var App = /*#__PURE__*/function () {
   function App() {
@@ -178,10 +337,13 @@ var App = /*#__PURE__*/function () {
 
     var queryString = new URLSearchParams(location.search);
     this.digit = queryString.get('digit');
-    this.inputControl = new GuessInputControl('#guess', {
+    this.inputControl = new _GuessInputControl.default('#guess', {
       callback: this.handleGuess.bind(this),
       digitNumber: this.digit
     });
+    this.baseball = new _Baseball.default(this.digit);
+    console.log(this.baseball.problem);
+    this.resultsContainerEl = document.querySelector('.result-container');
   }
 
   _createClass(App, [{
@@ -192,15 +354,31 @@ var App = /*#__PURE__*/function () {
         return;
       }
 
-      console.log(values);
+      var result = this.baseball.getResult(values);
+      this.resultsContainerEl.insertAdjacentHTML('beforeend', this.createResultEl(values, result.toString()));
+
+      if (result.isDone()) {
+        alert('정답을 맞추었습니다!');
+        this.resetGame();
+      }
+    }
+  }, {
+    key: "resetGame",
+    value: function resetGame() {
+      this.inputControl.disable('정답을 맞추었습니다!');
+    }
+  }, {
+    key: "createResultEl",
+    value: function createResultEl(guess, result) {
+      return "<li class=\"list-group-item\">\n              <span class=\"guess\">".concat(guess.join(' '), "</span>\n              <span class=\"badge result\">").concat(result, "</span>\n            </li>");
     }
   }]);
 
   return App;
 }();
 
-var app = new App();
-},{}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+new App();
+},{"./GuessInputControl":"src/GuessInputControl.js","./Baseball":"src/Baseball.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -228,7 +406,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58468" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49806" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
